@@ -1,0 +1,9 @@
+- name: Deploy to Firebase Hosting
+  env:
+    FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  run: |
+    if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+      firebase deploy --only hosting
+    elif [ "${{ github.ref }}" == "refs/heads/qa" ]; then
+      firebase deploy --only hosting:qa
+    fi
