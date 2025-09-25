@@ -1,0 +1,44 @@
+name: Deploy POSBeer to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main    # Producción
+      - qa      # QA
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and Export Next.js SPA
+        run: npm run build && npm run export
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy to Firebase Hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "Deploying to Production..."
+            firebase deploy --only hosting:prod
+          elif [ "${{ github.ref }}" == "refs/heads/qa" ]; then
+            echo "Deploying to QA..."
+            firebase deploy --only hosting:qa
+          else
+            echo "Branch not configured for deployment."
+          fi
+
