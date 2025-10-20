@@ -1,72 +1,78 @@
 "use client";
+
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Sun, Moon } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
+import dynamic from "next/dynamic";
 import { PosbeerLogo } from "@/components/PosbeerLogo";
+
+// Cargamos los gráficos sin romper SSR
+const LineChart = dynamic(() => import("recharts").then(mod => mod.LineChart), { ssr: false });
+const Line = dynamic(() => import("recharts").then(mod => mod.Line), { ssr: false });
+const XAxis = dynamic(() => import("recharts").then(mod => mod.XAxis), { ssr: false });
+const YAxis = dynamic(() => import("recharts").then(mod => mod.YAxis), { ssr: false });
+const CartesianGrid = dynamic(() => import("recharts").then(mod => mod.CartesianGrid), { ssr: false });
+const Tooltip = dynamic(() => import("recharts").then(mod => mod.Tooltip), { ssr: false });
+const ResponsiveContainer = dynamic(() => import("recharts").then(mod => mod.ResponsiveContainer), { ssr: false });
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Detectar si el tema actual es oscuro
-    if (typeof document !== "undefined") {
-      const isDarkMode = document.documentElement.classList.contains("dark");
-      setIsDark(isDarkMode);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    if (typeof document !== "undefined") {
-      const html = document.documentElement;
-      html.classList.toggle("dark");
-      setIsDark(html.classList.contains("dark"));
-    }
-  };
+    const user = true;
+    if (!user) router.push("/login");
+  }, [router]);
 
   const stats = [
     { title: "Ventas Hoy", value: "$8,430", color: "bg-blue-500" },
-    { title: "Cervezas Vendidas", value: "237", color: "bg-blue-600" },
-    { title: "Ticket Promedio", value: "$178", color: "bg-blue-700" },
-    { title: "Propinas", value: "$920", color: "bg-blue-800" },
+    { title: "Cervezas Vendidas", value: "237", color: "bg-sky-600" },
+    { title: "Platillos Vendidos", value: "128", color: "bg-blue-700" },
+    { title: "Propinas", value: "$920", color: "bg-indigo-600" },
+  ];
+
+  const data = [
+    { name: "Lun", cerveza: 4000, comida: 2400 },
+    { name: "Mar", cerveza: 3500, comida: 2000 },
+    { name: "Mié", cerveza: 4200, comida: 2500 },
+    { name: "Jue", cerveza: 4800, comida: 3000 },
+    { name: "Vie", cerveza: 7500, comida: 4100 },
+    { name: "Sáb", cerveza: 8200, comida: 5000 },
+    { name: "Dom", cerveza: 6100, comida: 3200 },
   ];
 
   return (
-    <div className="min-h-screen transition-colors duration-500 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <header className="flex justify-between items-center p-6 border-b border-gray-300 dark:border-gray-700">
-        <button
-          onClick={() => router.push("/login")}
-          className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
-        >
-          <LogOut className="w-5 h-5" /> Cerrar sesión
-        </button>
-
-        <button
-          onClick={toggleTheme}
-          className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition"
-        >
-          {isDark ? (
-            <Sun className="w-5 h-5 text-yellow-400" />
-          ) : (
-            <Moon className="w-5 h-5 text-blue-400" />
-          )}
-        </button>
+    <div className="min-h-screen flex flex-col bg-white dark:bg-slate-900 transition-colors">
+      {/* Header */}
+      <header className="flex justify-between items-center p-4 shadow-md bg-blue-50 dark:bg-slate-800">
+        <div className="flex items-center gap-2">
+          <PosbeerLogo textColor="#1d4ed8" />
+          <span className="text-xl font-bold text-blue-900 dark:text-sky-100">POSBeer Dashboard</span>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => router.push("/login")}
+            className="bg-blue-700 text-white px-3 py-2 rounded-lg hover:bg-blue-800 flex items-center gap-1"
+          >
+            <LogOut size={16} /> Cerrar sesión
+          </button>
+          <button
+            onClick={() => document.documentElement.classList.toggle("dark")}
+            className="p-2 rounded-lg border hover:bg-blue-100 dark:hover:bg-slate-700"
+          >
+            {document.documentElement.classList.contains("dark") ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+        </div>
       </header>
 
-      {/* LOGO CENTRAL */}
-      <div className="flex flex-col items-center justify-center py-10 select-none">
-        <PosbeerLogo textColor={isDark ? "#93c5fd" : "#1d4ed8"} />
-      </div>
-
-      {/* ESTADÍSTICAS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-6 mb-8">
+      {/* Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6">
         {stats.map((s) => (
           <motion.div
             key={s.title}
-            className={${s.color} p-6 text-white rounded-xl shadow-md}
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
+            className={`${s.color} text-white p-4 rounded-xl shadow-md`}
           >
             <h2 className="text-lg font-semibold">{s.title}</h2>
             <p className="text-2xl font-bold">{s.value}</p>
@@ -74,14 +80,23 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* SECCIÓN RESUMEN */}
-      <section className="bg-white dark:bg-gray-800 p-6 mx-6 rounded-xl shadow-md transition">
-        <h2 className="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-300">
-          Resumen Semanal
-        </h2>
-        <p className="text-gray-700 dark:text-gray-300">
-          📊 Próximamente: gráficas de ventas, propinas y comida en tiempo real.
-        </p>
+      {/* Chart */}
+      <section className="p-6">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-blue-900 dark:text-sky-200">
+            Ventas Semanales
+          </h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+              <XAxis dataKey="name" stroke="#888" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="cerveza" stroke="#1d4ed8" strokeWidth={3} />
+              <Line type="monotone" dataKey="comida" stroke="#facc15" strokeWidth={3} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </section>
     </div>
   );
