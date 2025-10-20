@@ -1,0 +1,69 @@
+
+
+
+
+
+
+
+
+
+
+import "./globals.css";
+import "./globals.css";
+import { AppToaster } from "../components/ui/toaster";
+import { ThemeProvider } from "next-themes";
+
+export const metadata = {
+  title: "POSBeer",
+  description: "Punto de venta para bares de cerveza artesanal",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="es">
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="dark">
+          {children}
+          <AppToaster />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}import { AppToaster } from "../components/ui/toaster";
+import { ThemeProvider } from "next-themes";
+
+export const metadata = {
+  title: "POSBeer",
+  description: "Punto de venta para bares de cerveza artesanal",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="es">
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="dark">
+          {children}
+          <AppToaster />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

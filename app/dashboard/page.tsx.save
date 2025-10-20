@@ -1,0 +1,48 @@
+"use client" 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default function DashboardPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = true;
+    if (!user) router.push("/login");
+  }, [router]);
+
+  const stats = [
+    { title: "Ventas Hoy", value: "$8,430", color: "bg-amber-500" },
+    { title: "Cervezas Vendidas", value: "237", color: "bg-yellow-600" },
+    { title: "Ticket Promedio", value: "$178", color: "bg-amber-700" },
+    { title: "Propinas", value: "$920", color: "bg-yellow-800" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-amber-50 p-6">
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-amber-800">🍺 POSBeer Dashboard</h1>
+        <button
+          onClick={() => router.push("/login")}
+          className="bg-amber-700 text-white px-4 py-2 rounded-lg hover:bg-amber-800"
+        >
+          Cerrar sesión
+        </button>
+      </header>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {stats.map((s) => (
+          <div
+            key={s.title}
+            className={${s.color} p-6 text-white rounded-xl shadow-md}
+          >
+            <h2 className="text-lg font-semibold">{s.title}</h2>
+            <p className="text-2xl font-bold">{s.value}</p>
+          </div>
+        ))}
+      </div>
+
+      <section className="bg-white p-6 rounded-xl shadow-md">
+        <h2 className="text-xl font-semibold mb-4 text-amber-800">Resumen Semanal</h2>
+        <p className="text-gray-700">📊 Próximamente: gráficas de ventas, propinas y barriles.</p>
+      </section>
+    </div

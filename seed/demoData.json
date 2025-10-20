@@ -1,0 +1,11 @@
+{
+  "ventas": [
+    {"producto": "Cerveza IPA", "cantidad": 15, "total": 1200},
+    {"producto": "Taco de Suadero", "cantidad": 30, "total": 900},
+    {"producto": "Hamburguesa", "cantidad": 12, "total": 1440}
+  ],
+  "usuarios": [
+    {"rol": "Mesero", "nombre": "Juan Pérez"},
+    {"rol": "Cocina", "nombre": "Lupita Ramírez"}
+  ]
+}

@@ -1,0 +1,16 @@
+
+:root{ --bg:#ffffff; --fg:#0a2540; --primary:#0a84ff; --muted:#f3f7fb; }
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{ margin:0; background:var(--bg); color:var(--fg); font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial }
+a{ color:var(--primary); text-decoration:none }
+.container{ max-width:1200px; margin:0 auto; padding:1rem }
+.card{ background:#fff; border:1px solid #e6eef6; border-radius:12px; padding:1rem }
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; padding:.6rem 1rem; border-radius:10px; background:var(--primary); color:#fff; border:0; cursor:pointer }
+.btn:disabled{ opacity:.6; cursor:not-allowed }
+.input{ width:100%; padding:.65rem .8rem; border:1px solid #cfe0f1; border-radius:10px }
+.grid{ display:grid; gap:1rem }
+.grid-4{ grid-template-columns: repeat(4, minmax(0,1fr)); }
+header.app{ display:flex; align-items:center; justify-content:space-between; padding:1rem 0 }
+.brand{ font-weight:800; letter-spacing:.2px }
+.badge{ display:inline-block; padding:.25rem .6rem; background:#e8f2ff; color:#0b5dd8; border-radius:999px; font-size:.8rem }
